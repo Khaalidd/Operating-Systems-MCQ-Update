@@ -33,7 +33,7 @@
   <div class="container">
     <header>
       <div>
-        <h1>Operating Systems — Complete Quiz (Auto-grade)</h1>
+        <h1>Operating Systems — Quiz (Auto-grade)</h1>
         <p class="lead">Answer all questions then press <strong>Submit</strong> to grade. You can reset anytime.</p>
       </div>
     </header>
@@ -45,7 +45,7 @@
         <button id="submitBtn">Submit</button>
         <button id="resetBtn" class="secondary" type="button">Reset</button>
         <button id="shuffleBtn" class="secondary" type="button">Shuffle Questions</button>
-        <div style="margin-left:auto"><small class="hint">Questions: 145</small></div>
+        <div style="margin-left:auto"><small class="hint">Questions: 100</small></div>
       </div>
 
       <div id="summary" class="feedback"></div>
@@ -55,68 +55,256 @@
   </div>
 
 <script>
-// Questions dataset - Chapter 3: Processes + Chapter 4: Threads + Linux Commands
+// Questions dataset from the PDF test bank
 const questions = [
-  // Chapter 3: Processes - MCQs
-  {q: '1. What is a program before it becomes a process?', opts:['A) An active entity in memory','B) A passive entity stored on disk','C) A running application','D) A system call'], ans: 'B'},
-  {q: '2. When does a program become a process?', opts:['A) When it is written by a programmer','B) When it is compiled','C) When an executable file is loaded into memory','D) When it is saved on disk'], ans: 'C'},
-  {q: '3. Which of the following is NOT a component of a process in memory?', opts:['A) Text Section','B) Data Section','C) Compiler','D) Stack'], ans: 'C'},
-  {q: '4. The text section of a process contains:', opts:['A) Global variables','B) The program code','C) Dynamically allocated memory','D) Temporary data'], ans: 'B'},
-  {q: '5. What does the heap section of a process contain?', opts:['A) Function parameters','B) Program code','C) Memory dynamically allocated during runtime','D) Global variables'], ans: 'C'},
-  {q: '6. The stack section contains:', opts:['A) Global variables only','B) Program code only','C) Function parameters, return addresses, and local variables','D) Dynamically allocated memory only'], ans: 'C'},
-  {q: '7. A Process Control Block (PCB) is used to:', opts:['A) Compile programs','B) Represent a process in the operating system','C) Store user data','D) Manage disk space'], ans: 'B'},
-  {q: '8. Which information is NOT typically stored in a PCB?', opts:['A) Process identifier','B) CPU registers','C) Source code','D) Process state'], ans: 'C'},
-  {q: '9. The process state "new" means:', opts:['A) The process is being executed','B) The process is being created','C) The process is waiting for I/O','D) The process has finished'], ans: 'B'},
-  {q: '10. When a process is in the "running" state, it means:', opts:['A) It is waiting for I/O','B) Instructions are being executed','C) It is in the ready queue','D) It has been terminated'], ans: 'B'},
-  {q: '11. A process in the "waiting" state is:', opts:['A) Being executed by the CPU','B) Ready to be assigned to a processor','C) Waiting for some event to occur','D) Being created'], ans: 'C'},
-  {q: '12. The "ready" state means the process is:', opts:['A) Executing instructions','B) Waiting to be assigned to a processor','C) Waiting for I/O completion','D) Terminated'], ans: 'B'},
-  {q: '13. Which queue contains all processes in the system?', opts:['A) Ready queue','B) Job queue','C) Device queue','D) Waiting queue'], ans: 'B'},
-  {q: '14. The ready queue contains processes that are:', opts:['A) Waiting for I/O devices','B) Being created','C) Residing in main memory, ready and waiting to execute','D) Terminated'], ans: 'C'},
-  {q: '15. Device queues contain processes:', opts:['A) Ready to execute','B) Being created','C) Waiting for an I/O device','D) In the terminated state'], ans: 'C'},
-  {q: '16. The short-term scheduler is also known as:', opts:['A) Job scheduler','B) CPU scheduler','C) Medium-term scheduler','D) Process scheduler'], ans: 'B'},
-  {q: '17. How frequently is the short-term scheduler invoked?', opts:['A) Every few seconds','B) Every few minutes','C) Every few milliseconds','D) Once per hour'], ans: 'C'},
-  {q: '18. The long-term scheduler:', opts:['A) Selects which process should be executed next','B) Selects which processes should be brought into the ready queue','C) Removes processes from memory','D) Manages I/O devices'], ans: 'B'},
-  {q: '19. The long-term scheduler controls:', opts:['A) CPU utilization','B) The degree of multiprogramming','C) I/O operations','D) Memory allocation only'], ans: 'B'},
-  {q: '20. The medium-term scheduler is responsible for:', opts:['A) CPU scheduling','B) Job admission','C) Swapping processes between memory and disk','D) Device management'], ans: 'C'},
-  {q: '21. What is swapping in the context of medium-term scheduling?', opts:['A) Exchanging data between processes','B) Removing process from memory to disk and bringing it back','C) Switching between user mode and kernel mode','D) Changing process priorities'], ans: 'B'},
-  {q: '22. Cooperating processes are processes that:', opts:['A) Run independently without interaction','B) Can affect or be affected by other processes','C) Never share data','D) Run only in kernel mode'], ans: 'B'},
-  {q: '23. Which is NOT a model of Interprocess Communication (IPC)?', opts:['A) Shared memory','B) Message passing','C) Direct hardware access','D) Both A and B are IPC models'], ans: 'C'},
-  {q: '24. In the shared memory IPC model:', opts:['A) Processes exchange messages','B) Processes share a region of memory','C) Processes use system calls only','D) Processes cannot communicate'], ans: 'B'},
-  {q: '25. In message passing IPC:', opts:['A) Processes share memory directly','B) Processes communicate by exchanging messages','C) No communication occurs','D) Only the kernel can communicate'], ans: 'B'},
-  {q: '26. The data section of a process contains:', opts:['A) Program code','B) Global variables','C) Local variables','D) Function parameters'], ans: 'B'},
-  {q: '27. Which scheduler must be fast because it is invoked frequently?', opts:['A) Long-term scheduler','B) Medium-term scheduler','C) Short-term scheduler','D) I/O scheduler'], ans: 'C'},
-  {q: '28. The program counter in a PCB stores:', opts:['A) The number of programs running','B) The location of the next instruction to execute','C) The process identifier','D) The CPU utilization'], ans: 'B'},
-  {q: '29. CPU registers information in the PCB contains:', opts:['A) Contents of all process-centric registers','B) Only the program counter','C) Memory addresses only','D) I/O device information'], ans: 'A'},
-  {q: '30. Accounting information in the PCB includes:', opts:['A) Process state only','B) CPU used and clock time elapsed since start','C) Program code','D) User passwords'], ans: 'B'},
+  {q: '1. Which of the following is NOT a major OS component?', opts:['A) Process Management','B) Memory Management','C) Compiler Design','D) Storage Management'], ans: 'C'},
+  {q: '2. Bootstrap program is stored in:', opts:['A) RAM','B) ROM or EEPROM','C) Hard disk','D) Cache memory'], ans: 'B'},
+  {q: '3. The degree of multiprogramming refers to:', opts:['A) Number of CPUs','B) Number of processes in memory','C) Number of users','D) Number of I/O devices'], ans: 'B'},
+  {q: '4. Which interrupt is generated by the CPU itself?', opts:['A) Hardware interrupt','B) Software interrupt (trap)','C) External interrupt','D) Timer interrupt'], ans: 'B'},
+  {q: '5. DMA (Direct Memory Access) is used for:', opts:['A) High-speed I/O devices','B) CPU scheduling','C) Memory allocation','D) Process synchronization'], ans: 'A'},
+  {q: '6. An operating system acts as an intermediary between:', opts:['A) User and hardware','B) Hardware and software','C) Compiler and hardware','D) Application and compiler'], ans: 'A'},
+  {q: '7. Cache memory is:', opts:['A) Faster than main memory','B) Slower than main memory','C) Same speed as main memory','D) Faster than registers'], ans: 'A'},
+  {q: '8. What is the primary goal of an operating system?', opts:['A) To make the computer system convenient to use','B) To use computer hardware efficiently','C) To act as an interface between user and hardware','D) To provide network services'], ans: 'C'},
+  {q: '9. Time-sharing systems primarily focus on:', opts:['A) Interactive computer system','B) Batch processing','C) Real-time processing','D) Network services'], ans: 'A'},
+  {q: '10. System calls provide:', opts:['A) Interface to OS services','B) Direct hardware access','C) Compiler functions','D) Database operations'], ans: 'A'},
+  {q: '11. Dual-mode operation provides:', opts:['A) Protection for the operating system','B) Faster execution','C) Multiple user support','D) Network communication'], ans: 'A'},
+  {q: '12. In multiprogramming, the CPU switches to another job when:', opts:['A) Current job finishes','B) Current job waits for I/O','C) Timer expires','D) User requests it'], ans: 'B'},
+  {q: '13. Privileged instructions can only be executed in:', opts:['A) User mode','B) Kernel mode','C) Both modes','D) Protected mode only'], ans: 'B'},
+  {q: '14. A mode bit is used to:', opts:['A) Distinguish between user and kernel mode','B) Control I/O operations','C) Manage memory','D) Schedule processes'], ans: 'A'},
+  {q: '15. Which storage is volatile?', opts:['A) RAM','B) ROM','C) Hard disk','D) Flash memory'], ans: 'A'},
+  {q: '16. The memory hierarchy is ordered from fastest to slowest as:', opts:['A) Registers, cache, main memory, disk','B) Cache, registers, main memory, disk','C) Main memory, cache, registers, disk','D) Disk, main memory, cache, registers'], ans: 'A'},
+  {q: '17. The main purpose of an interrupt is to:', opts:['A) Stop program execution permanently','B) Signal CPU of an event requiring attention','C) Transfer control to user program','D) Allocate memory'], ans: 'B'},
+  {q: '18. In a computer system, protection is ensured by:', opts:['A) Hardware support only','B) Operating system policies only','C) Hardware and OS working together','D) User programs'], ans: 'C'},
+  {q: '19. Caching is primarily used for:', opts:['A) Copying information to faster storage','B) Backing up data','C) Encrypting data','D) Compressing data'], ans: 'A'},
+  {q: '20. Which of the following is a batch processing system?', opts:['A) Mainframe computers','B) Personal computers','C) Handheld computers','D) Embedded systems'], ans: 'A'},
+  {q: '21. Asymmetric multiprocessing involves:', opts:['A) Master-slave relationship','B) All processors equal','C) No coordination needed','D) Single processor only'], ans: 'A'},
+  {q: '22. Symmetric multiprocessing (SMP) means:', opts:['A) Each processor performs different tasks','B) All processors are peers','C) One processor is master','D) Processors share no memory'], ans: 'B'},
+  {q: '23. Real-time systems are characterized by:', opts:['A) Strict time constraints','B) High throughput','C) Maximum CPU utilization','D) Multiple users'], ans: 'A'},
+  {q: '24. A clustered system is characterized by:', opts:['A) Multiple systems working together','B) Single system with multiple cores','C) Virtual machines on one system','D) Distributed file systems only'], ans: 'A'},
+  {q: '25. Virtual memory allows:', opts:['A) Execution of programs larger than physical memory','B) Faster program execution','C) Better GUI display','D) Network communication'], ans: 'A'},
+  {q: '26. Hard real-time systems:', opts:['A) Must meet deadlines always','B) Can tolerate some deadline misses','C) Are less critical than soft real-time','D) Have no timing constraints'], ans: 'A'},
+  {q: '27. The interrupt vector contains:', opts:['A) Addresses of interrupt service routines','B) Interrupt priorities','C) Device identifiers','D) Process states'], ans: 'A'},
+  {q: '28. Spooling stands for:', opts:['A) Simultaneous Peripheral Operations On-Line','B) Serial Processing Of Output Listings','C) System Programming Of Operating Loops','D) Standard Procedure Of Operation Loading'], ans: 'A'},
+  {q: '29. Context switch involves:', opts:['A) Saving state of current process','B) Loading state of new process','C) Switching between processes','D) Switching users'], ans: 'C'},
+  {q: '30. A trap is caused by:', opts:['A) Hardware failure','B) Error or user request','C) Timer','D) I/O completion'], ans: 'B'},
+  {q: '31. Which is NOT a type of system call?', opts:['A) Process control','B) File management','C) Compilation','D) Device management'], ans: 'C'},
+  {q: '32. The operating system kernel is:', opts:['A) Always in memory','B) Loaded on demand','C) Stored in secondary storage','D) Part of application software'], ans: 'A'},
+  {q: '33. A CPU bound process:', opts:['A) Requires more computation','B) Spends more time in I/O','C) Never performs I/O','D) Uses only memory'], ans: 'A'},
+  {q: '34. An I/O bound process:', opts:['A) Spends more time doing I/O','B) Requires more CPU time','C) Never uses CPU','D) Only uses disk'], ans: 'A'},
+  {q: '35. Turnaround time is:', opts:['A) Time from submission to completion','B) Time in ready queue','C) Time in execution','D) Time in waiting'], ans: 'A'},
+  {q: '36. Throughput refers to:', opts:['A) Number of processes completed per unit time','B) Time to complete a process','C) CPU utilization','D) Response time'], ans: 'A'},
+  {q: '37. CPU utilization should ideally be:', opts:['A) As high as possible','B) As low as possible','C) Around 50%','D) Zero'], ans: 'A'},
+  {q: '38. Response time in interactive systems is:', opts:['A) Time from request to first response','B) Total execution time','C) Time to complete process','D) Time in ready queue'], ans: 'A'},
+  {q: '39. NUMA (Non-Uniform Memory Access) means:', opts:['A) Access time depends on memory location','B) All memory access is uniform','C) No memory sharing','D) Only local memory exists'], ans: 'A'},
+  {q: '40. Multicore systems have:', opts:['A) Multiple computing cores on single chip','B) Multiple separate processors','C) Single core with hyperthreading','D) Multiple motherboards'], ans: 'A'},
+  {q: '41. Which is NOT an OS service for users?', opts:['A) Program execution','B) I/O operations','C) Power management','D) Communication'], ans: 'C'},
+  {q: '42. Operating system services are provided for:', opts:['A) User convenience only','B) System efficiency only','C) User convenience and system efficiency','D) Hardware management only'], ans: 'C'},
+  {q: '43. System calls are:', opts:['A) Programming interface to OS services','B) Hardware instructions','C) Compiler directives','D) Database queries'], ans: 'A'},
+  {q: '44. A user interface can be:', opts:['A) Command-line interface (CLI)','B) Graphical user interface (GUI)','C) Batch interface','D) Any of these types'], ans: 'D'},
+  {q: '45. The main advantage of using API rather than system calls is:', opts:['A) Program portability','B) Faster execution','C) Less memory usage','D) Better security'], ans: 'A'},
+  {q: '46. An API (Application Programming Interface) is:', opts:['A) Set of functions available to programmers','B) Hardware specification','C) System call itself','D) Operating system kernel'], ans: 'A'},
+  {q: '47. System call parameters can be passed by:', opts:['A) Registers','B) Block or table in memory','C) Stack','D) Any of these methods'], ans: 'D'},
+  {q: '48. Which is a file management system call?', opts:['A) wait()','B) create()','C) malloc()','D) signal()'], ans: 'B'},
+  {q: '49. Which is a process control system call?', opts:['A) fork()','B) read()','C) open()','D) chmod()'], ans: 'A'},
+  {q: '50. Communication between processes can be achieved through:', opts:['A) Shared memory','B) Message passing','C) Either shared memory or message passing','D) Files only'], ans: 'C'},
+  {q: '51. UNIX operating system structure consists of layers including:', opts:['A) Kernel at the core','B) Shell at the core','C) Applications at the core','D) Drivers at the core'], ans: 'A'},
+  {q: '52. The MS-DOS operating system uses:', opts:['A) Single-tasking','B) Multi-tasking','C) Time-sharing','D) Distributed processing'], ans: 'A'},
+  {q: '53. The main advantage of layered approach is:', opts:['A) Simplicity of construction','B) High performance','C) Less memory usage','D) Faster execution'], ans: 'A'},
+  {q: '54. Layered approach in OS design means:', opts:['A) OS divided into layers','B) OS divided into modules','C) OS as single unit','D) OS distributed across network'], ans: 'A'},
+  {q: '55. A microkernel provides:', opts:['A) Minimal process and memory management','B) All OS services in kernel','C) No process management','D) Only file management'], ans: 'A'},
+  {q: '56. The main disadvantage of layered approach is:', opts:['A) Careful planning required','B) Easy to implement','C) Very modular','D) Highly portable'], ans: 'A'},
+  {q: '57. Disadvantage of microkernel is:', opts:['A) Performance overhead of user-kernel communication','B) Complex design','C) No modularity','D) Poor security'], ans: 'A'},
+  {q: '58. Benefits of microkernel include:', opts:['A) Easier to extend','B) Better performance','C) Less overhead','D) Simpler design'], ans: 'A'},
+  {q: '59. Virtual machines provide:', opts:['A) Illusion of multiple machines','B) Faster execution','C) Less memory usage','D) Direct hardware access'], ans: 'A'},
+  {q: '60. Loadable kernel modules:', opts:['A) Can be loaded at boot or runtime','B) Must be loaded at boot only','C) Cannot be unloaded','D) Are not used in modern OS'], ans: 'A'},
+  {q: '61. Operating system generation (OS gen) involves:', opts:['A) Configuring OS for specific hardware','B) Updating OS kernel','C) Installing applications','D) Creating user accounts'], ans: 'A'},
+  {q: '62. The Java Virtual Machine (JVM):', opts:['A) Executes Java bytecode','B) Executes machine code','C) Executes assembly code','D) Executes Python code'], ans: 'A'},
+  {q: '63. GRUB is an example of:', opts:['A) Boot loader','B) File system','C) Shell','D) System call'], ans: 'A'},
+  {q: '64. System boot process starts with:', opts:['A) Bootstrap program loading OS','B) User login','C) Application loading','D) Network initialization'], ans: 'A'},
+  {q: '65. System programs provide:', opts:['A) Convenient environment for program development','B) Kernel functions','C) Hardware drivers','D) Network protocols'], ans: 'A'},
+  {q: '66. A shell is:', opts:['A) Command interpreter','B) Part of kernel','C) Hardware component','D) Device driver'], ans: 'A'},
+  {q: '67. A monolithic kernel:', opts:['A) Has all services in kernel space','B) Has minimal services in kernel','C) Has no services in kernel','D) Uses message passing only'], ans: 'A'},
+  {q: '68. Debugging a system involves:', opts:['A) Finding and fixing errors','B) Compiling programs','C) Installing software','D) Managing users'], ans: 'A'},
+  {q: '69. Protection mechanisms in OS:', opts:['A) Control access to resources','B) Increase CPU speed','C) Manage network traffic','D) Compile programs'], ans: 'A'},
+  {q: '70. System calls for communication include:', opts:['A) send() and receive()','B) open() and close()','C) fork() and exec()','D) malloc() and free()'], ans: 'A'},
+  {q: '71. The bootstrap program is the first program to run when a computer is powered on.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '72. An operating system is a resource allocator and control program.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '73. In multiprogramming, multiple programs are kept in memory simultaneously.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '74. Interrupts can only be generated by hardware devices.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '75. Time-sharing and multitasking are the same concept.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '76. Cache memory is larger but slower than main memory.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '77. DMA transfers data directly between I/O device and CPU registers.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '78. Privileged instructions can be executed in user mode.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '79. A system call changes the mode from user mode to kernel mode.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '80. Virtual memory allows execution of processes that are not completely in memory.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '81. In asymmetric multiprocessing, all processors are treated equally.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '82. Symmetric multiprocessing requires special master processor.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '83. Hard real-time systems can tolerate occasional deadline misses.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '84. Real-time systems must complete operations within strict time constraints.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '85. A trap is a software-generated interrupt.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '86. Spooling allows overlap of I/O of one job with computation of another.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '87. Context switching is overhead and does no useful work.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '88. The kernel is the part of OS that runs in user mode.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '89. Multicore systems have multiple processors on separate chips.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '90. Throughput is the number of processes completed per unit time.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '91. APIs hide the details of system calls from programmers.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '92. System calls provide a means for user programs to request OS services.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '93. Microkernel architecture moves services to user space.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '94. MS-DOS was designed with a layered structure.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '95. Virtual machines provide complete protection between system components.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '96. Layered approach makes OS easier to debug and verify.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '97. Loadable kernel modules are more flexible than layered approach.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '98. System programs provide a convenient environment for program development and execution.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  {q: '99. The shell is part of the operating system kernel.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
+  {q: '100. A monolithic kernel is more modular than a microkernel.', opts:['A) TRUE','B) FALSE'], ans: 'B'}
+];
+
+const quizDiv = document.getElementById('quiz');
+let currentQuestions = [...questions]; // Keep track of current question order
+
+function renderQuiz(){
+  quizDiv.innerHTML = '';
+  currentQuestions.forEach((item, idx) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'q';
+    qDiv.id = 'q'+(idx+1);
+    const h = document.createElement('h3');
+    // Extract question text without the original number
+    const questionText = item.q.replace(/^\d+\.\s*/, '');
+    h.textContent = (idx + 1) + '. ' + questionText;
+    qDiv.appendChild(h);
+
+    const optsDiv = document.createElement('div');
+    optsDiv.className = 'opts';
+
+    item.opts.forEach((opt, j)=>{
+      const label = document.createElement('label');
+      label.className = 'opt';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'q'+idx;
+      radio.value = String.fromCharCode(65+j);
+      const span = document.createElement('span');
+      // Remove any existing letter prefix (A), B), C), D)) from the option text
+      const cleanOpt = opt.replace(/^[A-D]\)\s*/, '');
+      // Add the new letter prefix based on current position
+      span.textContent = String.fromCharCode(65+j) + ') ' + cleanOpt;
+      label.appendChild(radio);
+      label.appendChild(span);
+      optsDiv.appendChild(label);
+    });
+
+    qDiv.appendChild(optsDiv);
+    quizDiv.appendChild(qDiv);
+  });
+}
+
+function grade(){
+  let correct=0;
+  currentQuestions.forEach((item, idx)=>{
+    const selected = document.querySelector('input[name="q'+idx+'"]:checked');
+    const qElem = document.getElementById('q'+(idx+1));
+    qElem.classList.remove('correct','wrong');
+    qElem.querySelectorAll('.opt').forEach(l=>{l.style.opacity='1';});
+    if(selected){
+      const val = selected.value;
+      if(val === item.ans){
+        correct++;
+        qElem.classList.add('correct');
+      } else {
+        qElem.classList.add('wrong');
+        qElem.querySelectorAll('.opt').forEach(l=>{if(l.querySelector('input').checked) l.style.fontWeight='700';});
+      }
+    } else {
+      qElem.classList.add('wrong');
+    }
+    let ansText = document.createElement('div');
+    ansText.style.marginTop='8px';
+    ansText.style.fontSize='13px';
+    ansText.style.color='#0b1220';
+    ansText.innerHTML = '<small><strong>Correct answer: </strong>' + item.ans + '</small>';
+    const old = qElem.querySelector('.correctAnswer');
+    if(old) old.remove();
+    ansText.className='correctAnswer';
+    qElem.appendChild(ansText);
+  });
+
+  const total = currentQuestions.length;
+  const percent = Math.round((correct/total)*100);
+  const gradeLetter = percent>=90? 'A' : percent>=80? 'B' : percent>=70? 'C' : percent>=60? 'D' : 'F';
+
+  const summary = document.getElementById('summary');
+  summary.innerHTML = '<div class="result"><div class="score">Score: '+correct+' / '+total+' ('+percent+'%) — Grade: '+gradeLetter+'</div>'+
+                      '<div style="margin-top:8px"><small>Correct: '+correct+' — Wrong/Unanswered: '+(total-correct)+'</small></div></div>';
+  summary.scrollIntoView({behavior:'smooth'});
+}
+
+function resetQuiz(){
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  document.querySelectorAll('.q').forEach(q=>{
+    q.classList.remove('correct','wrong');
+    const ca = q.querySelector('.correctAnswer'); if(ca) ca.remove();
+    q.querySelectorAll('.opt').forEach(l=>{l.style.fontWeight='400';l.style.opacity='1'});
+  });
+  document.getElementById('summary').innerHTML='';
+}
+
+function shuffleQuestions(){
+  // Reset first
+  resetQuiz();
   
-  // Chapter 3: Processes - True/False
-  {q: '31. A program is an active entity while a process is a passive entity.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
-  {q: '32. The text section of a process is typically read-only and might be shared by multiple processes.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
-  {q: '33. The heap contains temporary data such as function parameters.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
-  {q: '34. A Process Control Block (PCB) is used to represent a process in the operating system.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
-  {q: '35. A process can only be in one of three states: new, running, or terminated.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
-  {q: '36. The ready state means instructions are currently being executed.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
-  {q: '37. The long-term scheduler is invoked more frequently than the short-term scheduler.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
-  {q: '38. The short-term scheduler must be fast because it is invoked very frequently.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
-  {q: '39. Device queues contain processes waiting for I/O devices.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
-  {q: '40. Independent processes cannot affect or be affected by other processes in the system.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
-  {q: '41. Interprocess Communication (IPC) has only one model: shared memory.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
-  {q: '42. The stack section contains global variables.', opts:['A) TRUE','B) FALSE'], ans: 'B'},
-  {q: '43. The long-term scheduler controls the degree of multiprogramming.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
-  {q: '44. The medium-term scheduler is responsible for swapping processes between memory and disk.', opts:['A) TRUE','B) FALSE'], ans: 'A'},
-  {q: '45. All cooperating processes need interprocess communication (IPC).', opts:['A) TRUE','B) FALSE'], ans: 'A'},
+  // Fisher-Yates shuffle algorithm for questions
+  currentQuestions = [...questions];
+  for(let i = currentQuestions.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
+  }
   
-  // Chapter 4: Threads - MCQs
-  {q: '46. What is a thread?', opts:['A) A separate process','B) A basic unit of CPU utilization','C) An operating system','D) A hardware component'], ans: 'B'},
-  {q: '47. A thread comprises of:', opts:['A) Thread ID, program counter, register set, and stack','B) Only a program counter','C) Only memory space','D) Only code section'], ans: 'A'},
-  {q: '48. Threads belonging to the same process share:', opts:['A) Their own stack','B) Their own register set','C) Code section, data section, and OS resources','D) Nothing at all'], ans: 'C'},
-  {q: '49. Which of the following do threads NOT share?', opts:['A) Code section','B) Data section','C) Stack','D) Open files'], ans: 'C'},
-  {q: '50. What problem do threads solve in program execution?', opts:['A) Memory allocation','B) Seamless execution of multiple sections simultaneously','C) Hardware failures','D) Network connectivity'], ans: 'B'},
-  {q: '51. In a web browser, threads can be used for:', opts:['A) Displaying images while retrieving data from network','B) Only displaying images','C) Only retrieving network data','D) Compiling code'], ans: 'A'},
-  {q: '52. In a word processor, threads can handle:', opts:['A) Only displaying graphics','B) Only spell checking','C) Displaying graphics, responding to keystrokes, and spell checking','D) Only saving files'], ans: 'C'},
-  {q: '53. Modern operating system kernels are:', opts:['A) Single-threaded','B) Multithreaded','C) Thread-free','D) Process-only'], ans: 'B'},
-  {q: '54. Kernel threads perform tasks such as:', opts:['A) Managing devices, memory, and interrupt handling','B) Only user interface display','C) Only file editing','D) Only network browsing'], ans: 'A'},
-  {q: '55. On a single-core system, multithreading provides:', opts:['A) True parallelism','B) Concurrent execution','C) No benefit','D) Hardware upgrade'], ans: 'B'},
-  {q: '56. On a multi-core system, multithreading provides:', opts:['A) Only concurrent execution','B) True parallelism','C) No advantage','D) Slower execution'], ans: 'B'},
-  {q: '57. User threads are:', opts:['A) Supported above the kernel without kernel support','B) Managed directly by the operating system','C) Not supported in modern systems','D) The same as kernel threads'], ans: 'A'},
-  {q: '58. Kernel threads are:', opts:['A) Managed without kernel support','B) Supported and managed directly by the operating system','C) Not used in modern systems','D) Only for user applications'], ans: 'B'
+  // Shuffle answer options for each question (except TRUE/FALSE)
+  currentQuestions = currentQuestions.map(q => {
+    // Check if it's a TRUE/FALSE question
+    if(q.opts.length === 2 && q.opts[0].includes('TRUE') && q.opts[1].includes('FALSE')){
+      return q; // Don't shuffle TRUE/FALSE
+    }
+    
+    // Create a copy of the question
+    const newQ = {...q};
+    
+    // Create array of options with their original letters
+    const optionsWithLetters = newQ.opts.map((opt, idx) => ({
+      text: opt,
+      originalLetter: String.fromCharCode(65 + idx) // A, B, C, D
+    }));
+    
+    // Shuffle the options
+    for(let i = optionsWithLetters.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [optionsWithLetters[i], optionsWithLetters[j]] = [optionsWithLetters[j], optionsWithLetters[i]];
+    }
+    
+    // Update the options array
+    newQ.opts = optionsWithLetters.map(item => item.text);
+    
+    // Find where the correct answer moved to
+    const correctAnswerIndex = optionsWithLetters.findIndex(item => item.originalLetter === newQ.ans);
+    newQ.ans = String.fromCharCode(65 + correctAnswerIndex);
+    
+    return newQ;
+  });
+  
+  // Re-render with shuffled questions
+  renderQuiz();
+  
+  // Scroll to top
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+renderQuiz();
+
+document.getElementById('submitBtn').addEventListener('click', grade);
+document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleQuestions);
+
+</script>
+</body>
+</html>
